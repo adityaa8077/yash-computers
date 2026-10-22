@@ -14,6 +14,7 @@ import { Testimonials } from './components/Testimonials';
 import { StoreLocationSection } from './components/StoreLocationSection';
 import { InquiryModal } from './components/InquiryModal';
 import { Footer } from './components/Footer';
+import { AIChatbot } from './components/AIChatbot';
 import { MessageSquare, PhoneCall } from 'lucide-react';
 
 export const App: React.FC = () => {
@@ -120,6 +121,12 @@ export const App: React.FC = () => {
           <MessageSquare size={24} />
         </a>
       </div>
+
+      {/* AI Chatbot Assistant (Bilingual Hindi & English) */}
+      <AIChatbot
+        onSelectLaptop={(lap) => setSelectedLaptop(lap)}
+        onOpenInquiry={(subject) => handleOpenInquiry(subject)}
+      />
     </div>
   );
 };

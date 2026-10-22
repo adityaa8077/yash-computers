@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
-import { Laptop, Phone, MessageSquare, MapPin, Menu, X, ShieldCheck, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Laptop, Phone, MessageSquare, MapPin, Menu, X, ShieldCheck, Search, Globe } from 'lucide-react';
 import { STORE_INFO } from '../data/mockData';
+import { getCurrentLanguage, setLanguage, type SupportedLanguage } from '../utils/translate';
 
 interface NavbarProps {
   onSearchChange: (query: string) => void;
@@ -10,6 +11,16 @@ interface NavbarProps {
 
 export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onOpenInquiry }) => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [currentLang, setCurrentLang] = useState<SupportedLanguage>('en');
+
+  useEffect(() => {
+    setCurrentLang(getCurrentLanguage());
+  }, []);
+
+  const handleToggleLanguage = (lang: SupportedLanguage) => {
+    setCurrentLang(lang);
+    setLanguage(lang);
+  };
 
   return (
     <header className="navbar-wrapper">
@@ -26,7 +37,30 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onO
             <span className="timing-pill">Open Today: 10:00 AM - 9:00 PM</span>
           </div>
           <div className="top-banner-right">
-            <span className="offer-tag">✨ Festive & Student Discount: Up to ₹12,000 Off + Free Bag & Mouse</span>
+            <span className="offer-tag">✨ Festive & Student Discount: Up to ₹12,000 Off</span>
+
+            {/* Google Translate Language Toggle */}
+            <div className="lang-switcher-pill" title="Change Language / भाषा बदलें">
+              <Globe size={13} className="lang-globe-icon" />
+              <button 
+                type="button"
+                onClick={() => handleToggleLanguage('hi')} 
+                className={`lang-btn ${currentLang === 'hi' ? 'active' : ''}`}
+                title="हिन्दी में देखें (View in Hindi)"
+              >
+                हिन्दी
+              </button>
+              <span className="lang-slash">/</span>
+              <button 
+                type="button"
+                onClick={() => handleToggleLanguage('en')} 
+                className={`lang-btn ${currentLang === 'en' ? 'active' : ''}`}
+                title="View in English"
+              >
+                EN
+              </button>
+            </div>
+
             <a href={`tel:${STORE_INFO.phone}`} className="top-call-link">
               <Phone size={13} /> {STORE_INFO.phone}
             </a>
@@ -162,6 +196,25 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onO
           <div className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
             <div className="mobile-drawer-header">
               <span className="mobile-drawer-title">Menu & Quick Links</span>
+              
+              {/* Language Switcher inside Mobile Drawer */}
+              <div className="mobile-drawer-lang-wrap">
+                <button
+                  type="button"
+                  onClick={() => handleToggleLanguage('hi')}
+                  className={`drawer-lang-btn ${currentLang === 'hi' ? 'active' : ''}`}
+                >
+                  हिन्दी
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleToggleLanguage('en')}
+                  className={`drawer-lang-btn ${currentLang === 'en' ? 'active' : ''}`}
+                >
+                  English
+                </button>
+              </div>
+
               <button 
                 onClick={() => setMobileMenuOpen(false)} 
                 className="mobile-drawer-close"
