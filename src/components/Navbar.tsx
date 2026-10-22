@@ -93,7 +93,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onO
             <button 
               id="book-demo-navbar-btn"
               onClick={onOpenInquiry}
-              className="btn btn-secondary btn-sm"
+              className="btn btn-secondary btn-sm nav-cta-desktop"
             >
               Book Store Visit
             </button>
@@ -102,10 +102,20 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onO
               href={`https://wa.me/${STORE_INFO.whatsapp}?text=${encodeURIComponent("Hello Yash Computers Rajgarh, I would like to inquire about fresh laptops available at your showroom.")}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn btn-whatsapp btn-sm"
+              className="btn btn-whatsapp btn-sm nav-cta-desktop"
             >
               <MessageSquare size={16} />
               <span>WhatsApp</span>
+            </a>
+
+            {/* Quick Call Button for Mobile */}
+            <a 
+              href={`tel:${STORE_INFO.phone}`}
+              className="mobile-quick-call-btn"
+              title="Call Yash Computers"
+              aria-label="Call Store"
+            >
+              <Phone size={18} />
             </a>
             
             {/* Mobile Menu Toggle */}
@@ -114,6 +124,7 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onO
               className="mobile-toggle"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Toggle mobile navigation menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
@@ -140,44 +151,78 @@ export const Navbar: React.FC<NavbarProps> = ({ onSearchChange, searchQuery, onO
         </div>
       </div>
 
-      {/* Mobile Drawer */}
+      {/* Mobile Drawer Backdrop and Drawer */}
       {mobileMenuOpen && (
-        <div className="mobile-drawer">
-          <div className="mobile-search-wrapper">
-            <Search size={16} />
-            <input
-              type="text"
-              placeholder="Search HP, Dell, Asus, MacBook..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-            />
+        <>
+          <div 
+            className="mobile-drawer-backdrop" 
+            onClick={() => setMobileMenuOpen(false)}
+            aria-hidden="true"
+          />
+          <div className="mobile-drawer" role="dialog" aria-modal="true" aria-label="Mobile Navigation">
+            <div className="mobile-drawer-header">
+              <span className="mobile-drawer-title">Menu & Quick Links</span>
+              <button 
+                onClick={() => setMobileMenuOpen(false)} 
+                className="mobile-drawer-close"
+                aria-label="Close menu"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="mobile-search-wrapper">
+              <Search size={18} className="mobile-search-icon" />
+              <input
+                type="text"
+                placeholder="Search HP, Dell, Asus, MacBook..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="mobile-search-input"
+              />
+              {searchQuery && (
+                <button 
+                  onClick={() => onSearchChange('')} 
+                  className="mobile-search-clear"
+                  type="button"
+                >
+                  <X size={14} />
+                </button>
+              )}
+            </div>
+            <div className="mobile-links">
+              <a href="#laptops" onClick={() => setMobileMenuOpen(false)}>💻 All Fresh Laptops (100% Sealed)</a>
+              <a href="#showroom" onClick={() => setMobileMenuOpen(false)}>📸 Real Showroom Tour (Photos)</a>
+              <a href="#services" onClick={() => setMobileMenuOpen(false)}>🔧 Laptop Repair & SSD Upgrades</a>
+              <a href="#emi-calc" onClick={() => setMobileMenuOpen(false)}>💳 Zero Downpayment EMI</a>
+              <a href="#store-visit" onClick={() => setMobileMenuOpen(false)}>📍 Showroom Address & Timing</a>
+            </div>
+            <div className="mobile-cta-group">
+              <button 
+                onClick={() => { setMobileMenuOpen(false); onOpenInquiry(); }}
+                className="btn btn-primary btn-mobile-cta"
+              >
+                Book Free Store Demo
+              </button>
+              <a 
+                href={`https://wa.me/${STORE_INFO.whatsapp}?text=${encodeURIComponent("Namaste Yash Computers Rajgarh, I am browsing your website and want to check laptop availability.")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn btn-whatsapp btn-mobile-cta"
+              >
+                <MessageSquare size={18} /> Chat on WhatsApp
+              </a>
+              <a 
+                href={`tel:${STORE_INFO.phone}`}
+                className="btn btn-secondary btn-mobile-cta"
+              >
+                <Phone size={18} /> Call {STORE_INFO.phone}
+              </a>
+            </div>
+            <div className="mobile-drawer-footer">
+              <MapPin size={13} /> Near Bus Stand, Main Market, Rajgarh
+            </div>
           </div>
-          <div className="mobile-links">
-            <a href="#laptops" onClick={() => setMobileMenuOpen(false)}>💻 All Fresh Laptops (100% Sealed)</a>
-            <a href="#showroom" onClick={() => setMobileMenuOpen(false)}>📸 Real Showroom Tour (Photos)</a>
-            <a href="#services" onClick={() => setMobileMenuOpen(false)}>🔧 Laptop Repair & SSD Upgrades</a>
-            <a href="#emi-calc" onClick={() => setMobileMenuOpen(false)}>💳 Zero Downpayment EMI</a>
-            <a href="#store-visit" onClick={() => setMobileMenuOpen(false)}>📍 Showroom Address & Timing</a>
-          </div>
-          <div className="mobile-cta-group">
-            <button 
-              onClick={() => { setMobileMenuOpen(false); onOpenInquiry(); }}
-              className="btn btn-primary"
-              style={{ width: '100%' }}
-            >
-              Book Free Store Demo
-            </button>
-            <a 
-              href={`https://wa.me/${STORE_INFO.whatsapp}?text=${encodeURIComponent("Namaste Yash Computers Rajgarh, I am browsing your website and want to check laptop availability.")}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-whatsapp"
-              style={{ width: '100%' }}
-            >
-              <MessageSquare size={18} /> Chat on WhatsApp
-            </a>
-          </div>
-        </div>
+        </>
       )}
     </header>
   );
